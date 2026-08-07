@@ -18,6 +18,8 @@ import consultasService from "../services/consultasService";
 import { Consulta } from "../interfaces/consulta";
 import { StatusConsulta } from "../types/statusConsulta";
 import { ConsultaCard, Loading, EmptyState } from "../components";
+import { useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
 type ConsultasListScreenProps = {
  navigation: any;
@@ -32,9 +34,11 @@ export default function ConsultasListScreen({
  const [refreshing, setRefreshing] = useState(false);
  const [filtroAtivo, setFiltroAtivo] = useState<StatusConsulta | "todas">("todas");
 
- useEffect(() => {
- carregarConsultas();
- }, []);
+    useFocusEffect(
+        useCallback(() => {
+            carregarConsultas();
+        }, [usuario?.id])
+    );
 
  async function carregarConsultas() {
  setLoading(true);
