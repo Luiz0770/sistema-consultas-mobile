@@ -105,6 +105,7 @@ export default function ConsultasListScreen({
       ? consultas
       : consultas.filter((c) => c.status === filtroAtivo)
   ).slice().sort((a, b) => {
+    // Emergências / prioridade aparecem primeiro na lista
     const pa = a.prioridade || a.emergencia ? 1 : 0;
     const pb = b.prioridade || b.emergencia ? 1 : 0;
     return pb - pa;

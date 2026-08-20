@@ -5,7 +5,7 @@
 
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Consulta } from "../interfaces/consulta";
+import { Consulta } from "../types";
 import { formatarData, formatarHorario, obterCorStatus, obterTextoStatus } from "../utils/formatters";
 
 type ConsultaCardProps = {
@@ -23,18 +23,22 @@ export default function ConsultaCard({
 }: ConsultaCardProps) {
   const corStatus = obterCorStatus(consulta.status);
 
+  const ehPrioritaria = Boolean(consulta.prioridade || consulta.emergencia);
+
   return (
-    <View style={[styles.card, consulta.prioridade && styles.cardPrioritario]}>
-      {consulta.prioridade && (
-        <View style={styles.badgePrioritario}>
-          <Text style={styles.badgePrioritarioTexto}>🚨 PRIORITÁRIA</Text>
-        </View>
-      )}
+    <View style={[styles.card, ehPrioritaria && styles.cardEmergencia]}>
       {/* Cabeçalho com Status */}
-      <View style={[styles.statusBadge, { backgroundColor: corStatus }]}>
-        <Text style={styles.statusTexto}>
-          {obterTextoStatus(consulta.status)}
-        </Text>
+      <View style={styles.badgesRow}>
+        <View style={[styles.statusBadge, { backgroundColor: corStatus }]}>
+          <Text style={styles.statusTexto}>
+            {obterTextoStatus(consulta.status)}
+          </Text>
+        </View>
+        {ehPrioritaria && (
+          <View style={styles.emergenciaBadge}>
+            <Text style={styles.statusTexto}>🚨 PRIORITÁRIA</Text>
+          </View>
+        )}
       </View>
 
       {/* Informações Principais */}
@@ -115,29 +119,29 @@ const styles = StyleSheet.create({
     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
     elevation: 3,
   },
-  cardPrioritario: {
+  cardEmergencia: {
     borderWidth: 2,
-    borderColor: "#F44336",
+    borderColor: "#B71C1C",
+    backgroundColor: "#FFF5F5",
   },
-  badgePrioritario: {
-    alignSelf: "flex-start",
-    backgroundColor: "#F44336",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    marginBottom: 8,
-  },
-  badgePrioritarioTexto: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 12,
+  badgesRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginBottom: 12,
   },
   statusBadge: {
     alignSelf: "flex-start",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    marginBottom: 12,
+  },
+  emergenciaBadge: {
+    alignSelf: "flex-start",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    backgroundColor: "#B71C1C",
   },
   statusTexto: {
     color: "#fff",
