@@ -113,10 +113,10 @@ class ConsultasService {
     }
     
     // Verifica permissão
-    if (!isAdmin && todasConsultas[index].usuarioId !== usuarioId) {
+    if (!isAdmin && todasConsultas[index].usuarioId !== undefined && todasConsultas[index].usuarioId !== usuarioId) {
       throw new Error("Você não tem permissão para modificar esta consulta");
     }
-    
+
     if (todasConsultas[index].status !== "agendada") {
       throw new Error("Apenas consultas agendadas podem ser confirmadas");
     }
@@ -146,10 +146,10 @@ class ConsultasService {
     }
     
     // Verifica permissão
-    if (!isAdmin && todasConsultas[index].usuarioId !== usuarioId) {
+    if (!isAdmin && todasConsultas[index].usuarioId !== undefined && todasConsultas[index].usuarioId !== usuarioId) {
       throw new Error("Você não tem permissão para modificar esta consulta");
     }
-    
+
     if (
       todasConsultas[index].status !== "agendada" &&
       todasConsultas[index].status !== "confirmada"

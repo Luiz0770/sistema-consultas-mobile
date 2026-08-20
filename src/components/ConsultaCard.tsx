@@ -5,7 +5,7 @@
 
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Consulta } from "../types";
+import { Consulta } from "../interfaces/consulta";
 import { formatarData, formatarHorario, obterCorStatus, obterTextoStatus } from "../utils/formatters";
 
 type ConsultaCardProps = {
@@ -24,7 +24,12 @@ export default function ConsultaCard({
   const corStatus = obterCorStatus(consulta.status);
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, consulta.prioridade && styles.cardPrioritario]}>
+      {consulta.prioridade && (
+        <View style={styles.badgePrioritario}>
+          <Text style={styles.badgePrioritarioTexto}>🚨 PRIORITÁRIA</Text>
+        </View>
+      )}
       {/* Cabeçalho com Status */}
       <View style={[styles.statusBadge, { backgroundColor: corStatus }]}>
         <Text style={styles.statusTexto}>
@@ -109,6 +114,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
     elevation: 3,
+  },
+  cardPrioritario: {
+    borderWidth: 2,
+    borderColor: "#F44336",
+  },
+  badgePrioritario: {
+    alignSelf: "flex-start",
+    backgroundColor: "#F44336",
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginBottom: 8,
+  },
+  badgePrioritarioTexto: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 12,
   },
   statusBadge: {
     alignSelf: "flex-start",

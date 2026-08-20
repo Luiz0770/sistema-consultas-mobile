@@ -84,8 +84,9 @@ export default function ConsultasListScreen({
           onPress: async () => {
             try {
               await consultasService.cancelarConsulta(id, usuario?.id, isAdmin());
-              Alert.alert("Sucesso", "Consulta cancelada");
-              carregarConsultas();
+              Alert.alert("Sucesso", "Consulta cancelada com sucesso!", [
+                { text: "OK", onPress: () => carregarConsultas() },
+              ]);
             } catch (error: any) {
               Alert.alert("Erro", error.message || "Erro ao cancelar consulta");
             }
@@ -99,10 +100,15 @@ export default function ConsultasListScreen({
     navigation.navigate("ConsultaDetalhes", { consultaId: id });
   }
 
-  const consultasFiltradas =
+  const consultasFiltradas = (
     filtroAtivo === "todas"
       ? consultas
-      : consultas.filter((c) => c.status === filtroAtivo);
+      : consultas.filter((c) => c.status === filtroAtivo)
+  ).slice().sort((a, b) => {
+    const pa = a.prioridade || a.emergencia ? 1 : 0;
+    const pb = b.prioridade || b.emergencia ? 1 : 0;
+    return pb - pa;
+  });
 
   if (loading) {
     return <Loading mensagem="Carregando consultas..." />;
